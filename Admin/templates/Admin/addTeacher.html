@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %} Add Teacher {% endblock %}
+
+
+
+{% block content %}
+
+    {% load widget_tweaks %}
+
+
+    {% for field in form %}
+        {{ field.errors }}
+    {% endfor %}
+
+    <h1 class="text-center" style="margin-top: 25px;">Add Teacher</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">First Name</label>
+                    {{ user_form.first_name | add_class:"form-control" }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Last Name</label>
+                    {{ user_form.last_name | add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Gender</label>
+                    {{ teacher_form.gender | add_class:"form-control" }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Class</label>
+                    {{ teacher_form.room | add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Username</label>
+                    {{ user_form.username | add_class:"form-control" }}
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Password</label>
+                    {{ user_form.password | add_class:"form-control"  }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Email</label>
+                    {{ user_form.email |add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <input type="submit" value="Submit" class="btn btn-block btn-success">
+            </div>
+        </div>
+    </form>
+
+    <script>
+        $('#id_username').change(function(){
+            var username = $(this).val();
+
+            $.ajax({
+                url : 'validate-username',
+                data : {
+                    'username' : username
+                },
+                dataType:'json',
+                success:function(data){
+                    if (data.is_taken) {
+                        alert(data.error_message);
+                    }
+                }
+            });
+        });
+
+        $('#id_email').change(function(){
+            var email = $(this).val();
+
+            $.ajax({
+                url : 'validate-email',
+                data : {
+                    'email' : email
+                },
+                dataType: 'json',
+                success : function(data){
+                    if (data.is_taken){
+                        alert(data.error_message);
+                    }
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

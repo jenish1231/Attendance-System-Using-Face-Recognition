@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+
+ {% if messages %}
+  <ul class="messages alert alert-warning" style="list-style: none;">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+    <div class="header custom-scrollbar">
+
+        <a href="{% url 'admins:report' %}" class="btn btn-primary">View Report</a>
+        <a href="{% url 'admins:train' %}" class="btn btn-primary">Train Algorithm</a>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                   aria-controls="home" aria-expanded="true">Teacher</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                   aria-controls="profile">Student</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent" style="margin-top:20px;">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <p>Total Teachers : {{ totalTeacher }} </p>
+
+                <a href="{% url 'admins:add-teacher' %}" class="btn btn-secondary">Add Teacher</a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Gender</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Class</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       {% for teacher in teachers %}
+                           {% if teacher.username == 'admin' %}
+
+                           {% else %}
+                           <tr>
+                               <td>{{ forloop.counter }}</td>
+                               <td>{{ teacher.first_name }}</td>
+                               <td>{{ teacher.last_name }}</td>
+                               <td>{{ teacher.teacher.gender }}</td>
+                               <td>{{ teacher.username }}</td>
+                               <td>{{ teacher.email }}</td>
+                               <td>{{ teacher.teacher.room }}</td>
+
+                               <td><a href="{% url 'admins:edit-teacher' teacher.id %}" class="btn btn-sm btn-info">Edit</a>&nbsp;
+                                   <a href="{% url 'admins:delete-teacher' teacher.id %}" class="btn btn-sm btn-danger">Delete</a></td>
+                           </tr>
+                           {% endif %}
+                       {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+            <p>Total Students : {{ totalStudent }}</p>
+            <a href="{% url 'admins:add-student' %}" class="btn btn-secondary">Add Student</a>
+               <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Gender</th>
+                            <th>Roll No</th>
+                            <th>Class</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       {% for student in students %}
+                           <tr>
+                               <td>{{ student.id }}</td>
+                               <td>{{ student.first_name }}</td>
+                               <td>{{ student.last_name }}</td>
+                               <td>{{ student.gender }}</td>
+                               <td>{{ student.roll_no}}</td>
+                               <td>{{ student.room }}</td>
+                           <td><a href="{% url 'admins:edit-student' student.id %}" class="btn btn-sm btn-info">Edit</a>&nbsp;<a href="{% url 'admins:delete-student' student.id %}" class="btn btn-sm btn-danger">Delete</a></td>
+                           </tr>
+                       {% endfor %}
+                    </tbody>
+                </table>
+                {% if students.has_other_pages %}
+                    <nav aria-label="Page navigation" class="text-center">
+                    <ul class="pagination">
+                        {% if students.has_previous %}
+                            <li class="page-item"><a href="?page={{ students.previous_page_number }}" class="page-link">&laquo;</a></li>
+                        {% else %}
+                            <li class="disabled page-item page-link"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in students.paginator.page_range %}
+                            {% if users.number == i %}
+                                <li class="active page-item"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li class="page-item"><a href="?page={{ i }}" class="page-link">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if students.has_next %}
+                            <li class="page-item"><a href="?page={{ students.next_page_number }}" class="page-link">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled page-item page-link"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Report{% endblock %}
+
+{% block content %}
+    <h1 class="header">Report</h1>
+
+    <form action="" method="get" style="margin-top:50px;">
+
+        <div class="row">
+            <div class="col-md-6">
+                <select name="month" id="month" class="form-control" required>
+                    <option value="">Select Month</option>
+                    {% for key,value in months.items %}
+                        <option value="{{ value }}">{{ key }}</option>
+                    {% endfor %}
+                </select>
+
+            </div>
+            <div class="col-md-6">
+                 <select name="search" id="class" class="form-control" required>
+                     <option value="">Select Class </option>
+                    <option value="11A">11A</option>
+                    <option value="11B">11B</option>
+                </select>
+            </div>
+        </div>
+
+    <div class="row" style="margin-top: 20px;">
+        <input type="submit" value="Search" class="btn btn-info" >
+        </div>
+    </form>
+    <div style="margin-top:25px;">
+        <h4>Class : {{ class  }}</h4>
+        <h4>Month : {{ date }}</h4>
+        <h4>Total Students : {{ total_student }}</h4>
+    </div>
+<canvas id="myChart" style="width: 200px;height:100px;"></canvas>
+
+    <script>
+
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for r in row %}"{{ r.0 }}",{% endfor %}
+                ],
+                datasets: [{
+                    label: '# of Present Days',
+                    data: [
+                        {% for r in row %}
+                            { x:'{{ r.0 }}',y:{{r.1}} },
+                        {% endfor %}
+                    ],
+
+                    borderWidth: 1
+                }],
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+
+                        }
+                    }]
+                },
+            },
+
+        });
+        </script>
+{% endblock %}

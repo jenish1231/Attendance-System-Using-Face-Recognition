@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Information{% endblock %}
+
+{% block content %}
+    <h1 class="header">Student Information</h1>
+
+    {% for student in students %}
+
+    {% endfor %}
+
+    <table class="table ">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Roll No</th>
+                <th>Gender</th>
+                <th>Attendance</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in students %}
+                <tr>
+                <td></td>
+                <td>{{ p.student.first_name }}</td>
+                <td>{{ p.student.last_name }}</td>
+                <td>{{ p.student.roll_no }}</td>
+                <td>{{ p.student.gender }}</td>
+                {% if p.attended %}
+                    <td>Present</td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

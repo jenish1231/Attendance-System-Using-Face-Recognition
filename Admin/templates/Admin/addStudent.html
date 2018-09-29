@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Student{% endblock %}
+
+{% block content %}
+    {% load widget_tweaks %}
+
+    <h1 class="text-center" style="margin-top: 25px;">Add Student</h1>
+    {% if error_message %}
+       <div class="alert alert-danger" id="error_message">
+        {{ error_message }}
+       </div>
+    {% endif %}
+    <form action="" method="post" enctype="multipart/form-data" id="addStudentForm">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="First name" id="first_name">First Name</label>
+                    {{ form.first_name |add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Last Name</label>
+                    {{ form.last_name| add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Roll No</label>
+                    {{ form.roll_no | add_class:"form-control" }}
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Class</label>
+                {{ form.room | add_class:"form-control" }}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Gender</label>
+                    {{ form.gender|add_class:"form-control" }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Image Path</label>
+                    {{ form.image_path | add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <input type="submit" value="Submit" class="btn btn-success btn-block" id="submit">
+        </div>
+    </form>
+
+
+    <script>
+        $('#id_roll_no').change(function(){
+            var roll_no = $(this).val();
+
+            $.ajax({
+                url :'check-roll',
+                data : {
+                    'roll_no' : roll_no
+                },
+                dataType:'json',
+                success : function(data){
+                    if (data.is_taken){
+                        alert(data.error_message);
+                    }
+                }
+            });
+
+        });
+
+        $('#error_message').delay(1000).fadeOut('slow');
+
+        $('#id_image_path').change(function(){
+            var image = $(this).val();
+
+            if(image.slice(0)!='s'){
+                alert('Invalid Path Name \n Must Start with s')
+            }
+
+            $.ajax({
+                url :'check-image',
+                data : {
+                    'path' : image
+                },
+                dataType:'json',
+                success : function(data){
+                    if (data.is_taken){
+                        alert(data.error_message);
+                    }
+                }
+            });
+        });
+
+
+
+    </script>
+{% endblock %}
+

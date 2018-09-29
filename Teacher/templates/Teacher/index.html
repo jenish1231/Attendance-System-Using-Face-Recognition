@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %} Teacher {% endblock %}
+
+
+
+{% block content %}
+
+
+       {% if messages %}
+  <ul class="messages alert alert-warning" style="list-style: none;">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+   <div class="header">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <a class="btn btn-primary" href="{% url 'teacher:attendance' %}">Take Attendance</a>
+                <a href="{% url 'teacher:student-information' %}" class="btn btn-primary">Show Student Information</a>
+                <a href="{% url 'teacher:view-report' %}" class="btn btn-primary">View Report</a>
+                <p class="display-3">Total Present : {{ present }}/{{ total_student }}</p>
+            </div>
+        </div>
+   </div>
+    <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                    <div class="row">
+                            <div class="col-md-2">
+                                <label for="" style="font-size: 16px;">Search : </label>
+                            </div>
+                            <div class="col-md-7">
+                                 <input type="text" class="form-control" id="search" pattern="[0-9]" title="Digits Only!!" placeholder="Roll number">
+
+                            </div>
+                            <div class="col-md-1">
+                                <input type="submit" value="Search" class="btn btn-success" id="search-button">
+                            </div>
+                    </div>
+
+                <div class="row attendance-info">
+                     <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Roll No</th>
+                                <th>Attendance</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in report %}
+                                <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ p.student.first_name }}</td>
+                                <td>{{ p.student.last_name }}</td>
+                                <td>{{ p.student.roll_no }}</td>
+                                {% if p.attended %}
+                                    <td>Present</td>
+                                {% endif %}
+                                <td>{{ p.date }}</td>
+                                <td>{{ p.time }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    <script>
+        $('#search-button').click(function(){
+            var search_query = $('#search').val();
+
+            $.ajax({
+                url : 'search',
+                data : {
+                    'q':search_query
+                },
+                dataType:'json',
+                success : function(data){
+                    if(data.status) {
+                        alert('Name : ' + data.first_name + " " + data.last_name + "\n Roll No : " + data.roll_no + "\n Attendance :  " + data.attendance + "")
+                    }else{
+                        alert(data.error_message + "\n" + search_query + " is not present")
+                    }
+                }
+            });
+        });
+
+
+    </script>
+{% endblock %}

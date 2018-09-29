@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} Edit Student {% endblock %}
+
+{% block content %}
+    {% load widget_tweaks %}
+    <h1 class="text-center" style="margin-top: 25px;">Edit Student</h1>
+    <form action="" method="POST">
+
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">First Name</label>
+                    {{ form.first_name | add_class:"form-control" }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Last Name</label>
+                    {{ form.last_name | add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Gender</label>
+                    {{ form.gender | add_class:"form-control" }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Roll no</label>
+                    {{ form.roll_no | add_class:"form-control disabled" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Room</label>
+                    {{ form.room | add_class:"form-control" }}
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <input type="submit" value="Submit" class="btn btn-block btn-success">
+            </div>
+        </div>
+    </form>
+
+
+{% endblock %}

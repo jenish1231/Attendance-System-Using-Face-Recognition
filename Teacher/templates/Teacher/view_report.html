@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %} View Report {% endblock %}
+
+{% block content %}
+    {% load static %}
+    <h1 class="header">Attendance Report</h1>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        {% for key,value in months.items %}
+            <li class="breadcrumb-item"><a href="?mon={{ key }}&year=2018">{{ key }}</a></li>
+        {% endfor %}
+      </ol>
+    </nav>
+
+    <h4>Total Students : {{ students }}</h4>
+
+    <canvas id="myChart"></canvas>
+<script>
+
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for r in row %}"{{ r.0 }}",{% endfor %}
+                ],
+                datasets: [{
+                    label: '# of Present Days',
+                    data: [
+                        {% for r in row %}
+                            { x:'{{ r.0 }}',y:{{r.1}} },
+                        {% endfor %}
+                    ],
+
+                    borderWidth: 1
+                }],
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+
+                        }
+                    }]
+                },
+            },
+
+        });
+        </script>
+
+
+{% endblock %}
